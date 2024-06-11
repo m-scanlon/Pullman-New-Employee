@@ -3,11 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Static Web Page with PDF and File Upload</title>
+    <title>Welcome Potential Pullman Employees</title>
     <style>
       body {
         font-family: Arial, sans-serif;
         margin: 20px;
+        background-color: #001f3f; /* Dark blue background */
+        color: #ffffff; /* White text for contrast */
       }
       .pdf-container {
         margin-bottom: 20px;
@@ -17,11 +19,16 @@
         padding: 20px;
         border: 2px dashed #ccc;
         text-align: center;
+        background-color: #ffffff; /* White background for drop zone */
+        color: #001f3f; /* Dark blue text for drop zone */
+      }
+      .drop-zone:hover {
+        border-color: #ffffff; /* Change border color on hover */
       }
     </style>
   </head>
   <body>
-    <h1>Static Web Page with PDF and File Upload</h1>
+    <h1>Welcome Potential Pullman Employees</h1>
 
     <div class="pdf-container">
       <embed
@@ -44,7 +51,7 @@
 
       dropZone.addEventListener("dragover", (e) => {
         e.preventDefault();
-        dropZone.style.borderColor = "#000";
+        dropZone.style.borderColor = "#ffffff";
       });
 
       dropZone.addEventListener("dragleave", () => {
