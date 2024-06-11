@@ -4,29 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Welcome Potential Pullman Employees</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-        background-color: #001f3f; /* Dark blue background */
-        color: #ffffff; /* White text for contrast */
-      }
-      .pdf-container {
-        margin-bottom: 20px;
-        display: none; /* Hide the PDF container initially */
-      }
-      .drop-zone {
-        width: 100%;
-        padding: 20px;
-        border: 2px dashed #ccc;
-        text-align: center;
-        background-color: #ffffff; /* White background for drop zone */
-        color: #001f3f; /* Dark blue text for drop zone */
-      }
-      .drop-zone:hover {
-        border-color: #ffffff; /* Change border color on hover */
-      }
-    </style>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   </head>
   <body>
     <h1>Welcome Potential Pullman Employees</h1>
@@ -48,6 +28,8 @@
 
     <ul id="file-list"></ul>
 
+    <button id="download-btn" style="display: none">Download All Files</button>
+
     <script>
       function showPDF() {
         document.getElementById("pdf-container").style.display = "block";
@@ -55,10 +37,12 @@
 
       const dropZone = document.getElementById("drop-zone");
       const fileList = document.getElementById("file-list");
+      const downloadBtn = document.getElementById("download-btn");
+      let filesArray = [];
 
       dropZone.addEventListener("dragover", (e) => {
         e.preventDefault();
-        dropZone.style.borderColor = "#ffffff";
+        dropZone.style.borderColor = "#ff0000";
       });
 
       dropZone.addEventListener("dragleave", () => {
@@ -87,17 +71,32 @@
           li.textContent = file.name;
           fileList.appendChild(li);
 
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const link = document.createElement("a");
-            link.href = e.target.result;
-            link.download = file.name;
-            link.textContent = "Download";
-            li.appendChild(link);
-          };
-          reader.readAsDataURL(file);
+          filesArray.push(file);
+        }
+
+        if (filesArray.length > 0) {
+          downloadBtn.style.display = "inline-block";
         }
       }
+
+      downloadBtn.addEventListener("click", () => {
+        const userName = prompt("Please enter your name:");
+        if (!userName) {
+          alert("Name is required to download the files.");
+          return;
+        }
+
+        const zip = new JSZip();
+        const folder = zip.folder(`${userName}Paperwork`);
+
+        filesArray.forEach((file) => {
+          folder.file(file.name, file);
+        });
+
+        zip.generateAsync({ type: "blob" }).then((content) => {
+          saveAs(content, `${userName}Paperwork.zip`);
+        });
+      });
     </script>
   </body>
 </html>
