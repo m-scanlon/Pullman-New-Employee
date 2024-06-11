@@ -13,6 +13,7 @@
       }
       .pdf-container {
         margin-bottom: 20px;
+        display: none; /* Hide the PDF container initially */
       }
       .drop-zone {
         width: 100%;
@@ -30,7 +31,9 @@
   <body>
     <h1>Welcome Potential Pullman Employees</h1>
 
-    <div class="pdf-container">
+    <button onclick="showPDF()">Show PDF</button>
+
+    <div class="pdf-container" id="pdf-container">
       <embed
         src="your-fillable-form.pdf"
         width="600"
@@ -46,6 +49,10 @@
     <ul id="file-list"></ul>
 
     <script>
+      function showPDF() {
+        document.getElementById("pdf-container").style.display = "block";
+      }
+
       const dropZone = document.getElementById("drop-zone");
       const fileList = document.getElementById("file-list");
 
