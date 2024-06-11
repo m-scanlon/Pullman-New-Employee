@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Static Web Page with PDF and File Upload</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .pdf-container {
+        margin-bottom: 20px;
+      }
+      .drop-zone {
+        width: 100%;
+        padding: 20px;
+        border: 2px dashed #ccc;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Static Web Page with PDF and File Upload</h1>
+
+    <div class="pdf-container">
+      <embed
+        src="your-fillable-form.pdf"
+        width="600"
+        height="400"
+        type="application/pdf"
+      />
+    </div>
+
+    <div class="drop-zone" id="drop-zone">
+      Drag and drop files here or click to upload
+    </div>
+
+    <ul id="file-list"></ul>
+
+    <script>
+      const dropZone = document.getElementById("drop-zone");
+      const fileList = document.getElementById("file-list");
+
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = "#000";
+      });
+
+      dropZone.addEventListener("dragleave", () => {
+        dropZone.style.borderColor = "#ccc";
+      });
+
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = "#ccc";
+        handleFiles(e.dataTransfer.files);
+      });
+
+      dropZone.addEventListener("click", () => {
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.multiple = true;
+        fileInput.click();
+        fileInput.onchange = () => {
+          handleFiles(fileInput.files);
+        };
+      });
+
+      function handleFiles(files) {
+        for (const file of files) {
+          const li = document.createElement("li");
+          li.textContent = file.name;
+          fileList.appendChild(li);
+
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const link = document.createElement("a");
+            link.href = e.target.result;
+            link.download = file.name;
+            link.textContent = "Download";
+            li.appendChild(link);
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    </script>
+  </body>
+</html>
